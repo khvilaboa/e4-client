@@ -10,15 +10,14 @@ DELIM = ','
 
 parser = argparse.ArgumentParser(description='Empatica Client')
 
-parser.add_argument('-u', '--user',  action='store')
-parser.add_argument('-p', '--pwd', action='store')
+parser.add_argument('-u', '--user',  action='store', help='Username.')
+parser.add_argument('-p', '--pwd', action='store', help='Password.')
 
-parser.add_argument('-a', '--all_sessions',  action='store_true')
-parser.add_argument('-i', '--session_id',  action='store')
-parser.add_argument('-l', '--sessions_list', action='store_true')
+parser.add_argument('-a', '--all_sessions',  action='store_true', help='Downloads all sessions of a user.')
+parser.add_argument('-i', '--session_id',  action='store', help='Downloads an specific session.')
+parser.add_argument('-l', '--sessions_list', action='store_true', help='Downloads the list of sessions in CSV format.')
 
-parser.add_argument('-o', '--out', action='store')
-
+parser.add_argument('-o', '--out', action='store', help='Ouput file (for single files) or path (for multiple files).')
 
 args = parser.parse_args()
 
