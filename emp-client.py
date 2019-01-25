@@ -4,13 +4,15 @@ URL_AUTH = 'https://www.empatica.com/connect/authenticate.php'
 URL_SESSIONS_MAIN = 'https://www.empatica.com/connect/sessions.php'
 URL_SESSIONS_LIST = 'https://www.empatica.com/connect/connect.php/users/{uid}/sessions?from=0&to=999999999999'
 
-OUT_FILE = 'out.csv'
+DEFAULT_CSV_FILE = 'out.csv'
 DELIM = ','
 
 parser = argparse.ArgumentParser(description='Empatica Client')
 
 parser.add_argument('-u', '--user',  action='store')
 parser.add_argument('-p', '--pwd', action='store')
+parser.add_argument('-l', '--sessions_list', action='store_true')
+parser.add_argument('-o', '--out', action='store')
 
 args = parser.parse_args()
 
@@ -35,10 +37,12 @@ resp = s.get(URL_SESSIONS_LIST.format(uid = user_id))
 resp.raise_for_status()
 sessions_list = json.loads(resp.text)
 
-if sessions_list:
-	f = open(OUT_FILE, 'w')
-	f.write(DELIM.join(sessions_list[0].keys()))
-	for session in sessions_list:
-		f.write('\n' + DELIM.join(session.values()))
+
+if args.sessions_list:
+	if sessions_list:
+		f = open(args.out or DEFAULT_CSV_FILE, 'w')
+		f.write(DELIM.join(sessions_list[0].keys()))
+		for session in sessions_list:
+			f.write('\n' + DELIM.join(session.values()))
 
 
