@@ -5,18 +5,20 @@ URL_SESSIONS_MAIN = 'https://www.empatica.com/connect/sessions.php'
 URL_SESSIONS_LIST = 'https://www.empatica.com/connect/connect.php/users/{uid}/sessions?from=0&to=999999999999'
 URL_DOWNLOAD = 'https://www.empatica.com/connect/download.php?id={id}'
 DEFAULT_CSV_FILE = 'out.csv'
-DEFAULT_OUT_PATH = './'
+DEFAULT_OUT_PATH = '.'
 DELIM = ','
 
 parser = argparse.ArgumentParser(description='Empatica Client')
 
-parser.add_argument('-a', '--all_sessions',  action='store_true')
-
 parser.add_argument('-u', '--user',  action='store')
 parser.add_argument('-p', '--pwd', action='store')
 
+parser.add_argument('-a', '--all_sessions',  action='store_true')
+parser.add_argument('-i', '--session_id',  action='store')
+parser.add_argument('-l', '--sessions_list', action='store_true')
+
 parser.add_argument('-o', '--out', action='store')
-parser.add_argument('-s', '--sessions_list', action='store_true')
+
 
 args = parser.parse_args()
 
@@ -44,14 +46,20 @@ sessions_list = json.loads(resp.text)
 
 if args.sessions_list:
 	if sessions_list:
-		f = open(args.out or DEFAULT_CSV_FILE, 'w')
-		f.write(DELIM.join(sessions_list[0].keys()))
-		for session in sessions_list:
-			f.write('\n' + DELIM.join(session.values()))
+		with open(args.out or DEFAULT_CSV_FILE, 'w') as f:
+			f.write(DELIM.join(sessions_list[0].keys()))
+			for session in sessions_list:
+				f.write('\n' + DELIM.join(session.values()))
+elif args.session_id:
+	print('Downloading %s...' % args.session_id)
+	resp = s.get(URL_DOWNLOAD.format(id=args.session_id))
+	with open(args.out or '%s%s.zip' % (DEFAULT_OUT_PATH, args.session_id), 'wb') as f:
+		f.write(resp.content)
+
 elif args.all_sessions:
 	for session in sessions_list:
 		print('Downloading %s...' % session['id'])
 		resp = s.get(URL_DOWNLOAD.format(id=session['id']))
-		with open('%s%s.zip' % (DEFAULT_OUT_PATH, session['id']), 'wb') as f:
+		with open('%s/%s.zip' % (args.out or DEFAULT_OUT_PATH, session['id']), 'wb') as f:
 			f.write(resp.content)
 
