@@ -22,7 +22,9 @@ $ python emp-client.py [-h] [-u USER] [-p PWD] [-a] [-i SESSION_ID] [-l] [-o OUT
 
 &nbsp;&nbsp;&nbsp;&nbsp;**-i SESSION_ID, --session_id SESSION_ID**&nbsp;&nbsp;&nbsp;&nbsp;Downloads a specific session.
 
-&nbsp;&nbsp;&nbsp;&nbsp;**-l, --sessions_list**&nbsp;&nbsp;&nbsp;&nbsp;Downloads the list of sessions in CSV format.
+&nbsp;&nbsp;&nbsp;&nbsp;**-l, --sessions_list**&nbsp;&nbsp;&nbsp;&nbsp;Downloads the list of sessions in CSV format. It includes the following columns: _id, device_id	duration, status, start_time, label	device, exit_code_.
+
+&nbsp;&nbsp;&nbsp;&nbsp;**-p, --purchased_devs**&nbsp;&nbsp;&nbsp;&nbsp;Downloads the list of purchses devices in CSV format. It includes the following columns: _device_id, label, model, hardware_code, purchase_code, purchase_id_.
 
 &nbsp;&nbsp;&nbsp;&nbsp;**-o OUT, --out OUT**&nbsp;&nbsp;&nbsp;&nbsp;Ouput file (for single files) or path (for multiple                         files).
 
@@ -45,6 +47,8 @@ Downloads the episode that has 67677 as identifier. Since no credentials are spe
 
 ` $ python3 emp-client.py -l -o output.csv`
 
+Downloads the list of episodes as a CSV (output.csv). 
 
-Downloads the list of episodes as a CSV (output.csv). It includes the following columns: _id, device_id	duration, status, start_time, label	device, exit_code_
+` $ python3 emp-client.py -p`
 
+Downloads the list of purchased devices. 
