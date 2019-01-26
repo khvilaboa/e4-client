@@ -1,17 +1,27 @@
 # e4-client
-![build_badge](https://readthedocs.org/projects/e4-client/badge/?version=latest)
+![pypi_version_badge](https://img.shields.io/pypi/v/e4client.svg) ![build_badge](https://readthedocs.org/projects/e4-client/badge/?version=latest) 
 
 Client to download information of the E4 Connect platform.
 
 ## Installation
+The installation can be performed either with pip (recommended) or manually (using the local _setup.py_). It installs both the _e4client_ command line utlity and the _e4client_ package (that contains the logic of the client in the E4Connect class).
+
+PIP installation:
+
 ```sh 
-$ pip install -r requeriments.txt
+$ pip install e4client
+```
+
+Local installation:
+
+```sh 
+$ python setup.py install
 ```
 
 ## Usage
 
 ```sh 
-$ python emp-client.py [-h] [-u USER] [-p PWD] [-a] [-i SESSION_ID] [-l] [-o OUT]
+$ e4client [-h] [-u USER] [-p PWD] [-a] [-i SESSION_ID] [-l] [-o OUT]
 ```
 
 &nbsp;&nbsp;&nbsp;&nbsp;**-h, --help**&nbsp;&nbsp;&nbsp;&nbsp;Help message
@@ -56,4 +66,10 @@ Downloads the list of episodes as a CSV (output.csv).
 Downloads the list of purchased devices. 
 
 ## Documentation
-The E4 client can also be used as a library in external projects. The logic is encapsulated in the E4Connect class, that contain methods to retrieve the information of the platform. Documentation can be accessed [here](http://e4-client.readthedocs.io/).
+To use the E4 client as a library the _e4client_ package can be imported. Inside its E4Connect class different methods to retrieve the information of the platform are defined. It can be imported as follows:
+
+```python
+from e4client import E4Connect
+```
+
+Documentation can be accessed [here](http://e4-client.readthedocs.io/).
