@@ -14,11 +14,11 @@ class E4Connect:
     :param pwd: Password to log in the E4 Connect platform.
     """
 
-    URL_AUTH = 'https://www.empatica.com/connect/authenticate.php'
-    URL_SESSIONS_MAIN = 'https://www.empatica.com/connect/sessions.php'
-    URL_SESSIONS_LIST = 'https://www.empatica.com/connect/connect.php/users/{uid}/sessions?from=0&to=999999999999'
-    URL_DOWNLOAD = 'https://www.empatica.com/connect/download.php?id={id}'
-    URL_PURCHASED_DEVS = 'https://www.empatica.com/connect/connect.php/users/{uid}/api/purchasedDevices'
+    _URL_AUTH = 'https://www.empatica.com/connect/authenticate.php'
+    _URL_SESSIONS_MAIN = 'https://www.empatica.com/connect/sessions.php'
+    _URL_SESSIONS_LIST = 'https://www.empatica.com/connect/connect.php/users/{uid}/sessions?from=0&to=999999999999'
+    _URL_DOWNLOAD = 'https://www.empatica.com/connect/download.php?id={id}'
+    _URL_PURCHASED_DEVS = 'https://www.empatica.com/connect/connect.php/users/{uid}/api/purchasedDevices'
 
     def __init__(self, user: str, pwd: str):
         self.s = requests.Session()
@@ -32,9 +32,9 @@ class E4Connect:
         :param pwd: Password to log in the E4 Connect platform.
         """
         auth_info = {'username': user, 'password': pwd}
-        self.s.post(E4Connect.URL_AUTH, auth_info).raise_for_status()
+        self.s.post(E4Connect._URL_AUTH, auth_info).raise_for_status()
 
-        resp = self.s.get(E4Connect.URL_SESSIONS_MAIN)
+        resp = self.s.get(E4Connect._URL_SESSIONS_MAIN)
         resp.raise_for_status()
         self.user_id = re.search(r'userId = ([0-9]*);', resp.text).group(1)
 
@@ -45,7 +45,7 @@ class E4Connect:
 
         :return: list of dictionaries with information of the sessions.
         """
-        resp = self.s.get(E4Connect.URL_SESSIONS_LIST.format(uid=self.user_id))
+        resp = self.s.get(E4Connect._URL_SESSIONS_LIST.format(uid=self.user_id))
         resp.raise_for_status()
         return json.loads(resp.text)
 
@@ -58,7 +58,7 @@ class E4Connect:
         :param session_id: numeric ID that identifies the session.
         :param file_path: path of the resulting output file.
         """
-        resp = self.s.get(E4Connect.URL_DOWNLOAD.format(id=session_id))
+        resp = self.s.get(E4Connect._URL_DOWNLOAD.format(id=session_id))
         file_path = os.path.join(file_path, '%s.zip' % session_id) if os.path.isdir(file_path) else file_path
         with open('%s' % file_path, 'wb') as f:
             f.write(resp.content)
@@ -70,7 +70,7 @@ class E4Connect:
 
         :return: list of dictionaries with information of the devices.
         """
-        resp = self.s.get(E4Connect.URL_PURCHASED_DEVS.format(uid=self.user_id))
+        resp = self.s.get(E4Connect._URL_PURCHASED_DEVS.format(uid=self.user_id))
         resp.raise_for_status()
         return json.loads(resp.text)
 
