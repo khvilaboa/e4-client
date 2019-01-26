@@ -1,4 +1,4 @@
-# e4-connect
+# e4-client
 Client to download information of the E4 Connect platform.
 
 ## Installation
