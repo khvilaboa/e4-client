@@ -1,4 +1,6 @@
 # e4-client
+![build_badge](https://readthedocs.org/projects/e4-client/badge/?version=latest)
+
 Client to download information of the E4 Connect platform.
 
 ## Installation
@@ -26,7 +28,7 @@ $ python emp-client.py [-h] [-u USER] [-p PWD] [-a] [-i SESSION_ID] [-l] [-o OUT
 
 &nbsp;&nbsp;&nbsp;&nbsp;**-p, --purchased_devs**&nbsp;&nbsp;&nbsp;&nbsp;Downloads the list of purchses devices in CSV format. It includes the following columns: _device_id, label, model, hardware_code, purchase_code, purchase_id_.
 
-&nbsp;&nbsp;&nbsp;&nbsp;**-o OUT, --out OUT**&nbsp;&nbsp;&nbsp;&nbsp;Ouput file (for single files) or path (for multiple                         files).
+&nbsp;&nbsp;&nbsp;&nbsp;**-o OUT, --out OUT**&nbsp;&nbsp;&nbsp;&nbsp;Output file or path.
 
 ## Authentication through environment variables
 The username and the password can also be specified using environment variables. In Linux they can be specified as follows:
@@ -52,3 +54,6 @@ Downloads the list of episodes as a CSV (output.csv).
 ` $ python3 emp-client.py -p`
 
 Downloads the list of purchased devices. 
+
+## Documentation
+The E4 client can also be used as a library in external projects. The logic is encapsulated in the E4Connect class, that contain methods to retrieve the information of the platform. Documentation can be accessed [here](http://e4-client.readthedocs.io/).
