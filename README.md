@@ -1,6 +1,11 @@
 # e4-connect
 Client to download information of the E4 Connect platform.
 
+## Installation
+```sh 
+$ pip install -r requeriments.txt
+```
+
 ## Usage
 
 ```sh 
