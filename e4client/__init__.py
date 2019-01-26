@@ -1,4 +1,3 @@
-import argparse
 import json
 import os
 import re
@@ -28,6 +27,7 @@ class E4Connect:
     def auth(self, user: str, pwd: str):
         """
         Allows to login in the platform and retrieves the related user ID. Cookies will be saved for later requests.
+        
         :param user: Username to log in the E4 Connect platform.
         :param pwd: Password to log in the E4 Connect platform.
         """
@@ -82,65 +82,3 @@ class E4Connect:
         """
         return self.user_id
 
-
-if __name__ == "__main__":
-    DEFAULT_CSV_SESSIONS = 'sessions.csv'
-    DEFAULT_CSV_DEVICES = 'devices.csv'
-    DEFAULT_OUT_PATH = '.'
-    DELIM = ','
-
-    parser = argparse.ArgumentParser(description='Empatica Client')
-
-    parser.add_argument('-u', '--user', action='store', help='Username.')
-    parser.add_argument('-p', '--pwd', action='store', help='Password.')
-
-    parser.add_argument('-a', '--all_sessions', action='store_true', help='Downloads all sessions of a user.')
-    parser.add_argument('-i', '--session_id', action='store', help='Downloads a specific session.')
-    parser.add_argument('-l', '--sessions_list', action='store_true',
-                        help='Downloads the list of sessions in CSV format.')
-    parser.add_argument('-d', '--purchased_devs', action='store_true',
-                        help='Downloads a list of purchased devices in CSV format.')
-
-    parser.add_argument('-o', '--out', action='store',
-                        help='Output file (for single files) or path (for multiple files).')
-
-    args = parser.parse_args()
-
-    # Retrieve credentials
-    if not (args.user or 'E4_USER' in os.environ) or not (args.pwd or 'E4_PWD' in os.environ):
-        raise Exception('Credentials must be specified by params or environ variables (E4_USER, E4_PWD)')
-    user = args.user or os.environ['E4_USER']
-    pwd = args.pwd or os.environ['E4_PWD']
-
-    # Authenticate
-    e4c = E4Connect(user, pwd)
-
-    if args.sessions_list or args.all_sessions:
-        sessions_list = e4c.sessions_list()
-
-        if args.sessions_list:
-            if sessions_list:
-                args.out = os.path.join(args.out, DEFAULT_CSV_SESSIONS) if args.out and os.path.isdir(args.out) else None
-                with open(args.out or DEFAULT_CSV_SESSIONS, 'w') as f:
-                    f.write(DELIM.join(sessions_list[0].keys()))
-                    for session in sessions_list:
-                        f.write('\n' + DELIM.join(session.values()))
-        elif args.all_sessions:
-            for session in sessions_list:
-                print('Downloading %s...' % session['id'])
-                e4c.download_session(session['id'], args.out or DEFAULT_OUT_PATH)
-
-    elif args.session_id:
-        print('Downloading %s...' % args.session_id)
-        e4c.download_session(args.session_id, args.out or DEFAULT_OUT_PATH)
-
-    elif args.purchased_devs:
-        purchases_list = e4c.purchased_devices()
-
-        if purchases_list:
-
-            args.out = os.path.join(args.out, DEFAULT_CSV_DEVICES) if args.out and os.path.isdir(args.out) else None
-            with open(args.out or DEFAULT_CSV_DEVICES, 'w') as f:
-                f.write(DELIM.join(purchases_list[0].keys()))
-                for p in purchases_list:
-                    f.write('\n' + DELIM.join(p.values()))
