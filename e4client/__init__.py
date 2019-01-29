@@ -19,10 +19,12 @@ class E4Connect:
     _URL_DOWNLOAD = 'https://www.empatica.com/connect/download.php?id={id}'
     _URL_PURCHASED_DEVS = 'https://www.empatica.com/connect/connect.php/users/{uid}/api/purchasedDevices'
 
-    def __init__(self, user: str, pwd: str):
+    def __init__(self, user: str = None, pwd: str = None):
         self.s = requests.Session()
         self.user_id = None
-        self.auth(user, pwd)
+
+        if user and pwd:
+            self.auth(user, pwd)
 
     def auth(self, user: str, pwd: str):
         """
