@@ -54,6 +54,24 @@ if __name__ == "__main__":
                     e4c.download_session(session['id'], user_path)
                 else:
                     print('Skipping %s... (already exists)' % session['id'])
+
+            if args.sessions_list and sessions_list:
+                sessions_path = os.path.join(user_path, DEFAULT_CSV_SESSIONS)
+                with open(sessions_path, 'w') as f:
+                    f.write(DELIM.join(sessions_list[0].keys()))
+                    for session in sessions_list:
+                        f.write('\n' + DELIM.join(session.values()))
+
+            if args.purchased_devs:
+                purchases_list = e4c.purchased_devices()
+
+                if purchases_list:
+                    devices_path = os.path.join(user_path, DEFAULT_CSV_DEVICES)
+                    with open(devices_path, 'w') as f:
+                        f.write(DELIM.join(purchases_list[0].keys()))
+                        for p in purchases_list:
+                            f.write('\n' + DELIM.join(p.values()))
+
     else:
         # Retrieve credentials
         if not (args.user or 'E4_USER' in os.environ) or not (args.pwd or 'E4_PWD' in os.environ):
@@ -86,7 +104,6 @@ if __name__ == "__main__":
             purchases_list = e4c.purchased_devices()
 
             if purchases_list:
-
                 args.out = os.path.join(args.out, DEFAULT_CSV_DEVICES) if args.out and os.path.isdir(args.out) else None
                 with open(args.out or DEFAULT_CSV_DEVICES, 'w') as f:
                     f.write(DELIM.join(purchases_list[0].keys()))
