@@ -16,7 +16,8 @@ class E4Connect:
     _URL_AUTH = 'https://www.empatica.com/connect/authenticate.php'
     _URL_SESSIONS_MAIN = 'https://www.empatica.com/connect/sessions.php'
     _URL_SESSIONS_LIST = 'https://www.empatica.com/connect/connect.php/users/{uid}/sessions?from=0&to=999999999999'
-    _URL_DOWNLOAD = 'https://www.empatica.com/connect/download.php?id={id}'
+    _URL_SESSION_DELETE = 'https://www.empatica.com/connect/connect.php/sessions/{id}'
+    _URL_SESSION_DOWNLOAD = 'https://www.empatica.com/connect/download.php?id={id}'
     _URL_PURCHASED_DEVS = 'https://www.empatica.com/connect/connect.php/users/{uid}/api/purchasedDevices'
 
     def __init__(self, user: str = None, pwd: str = None):
@@ -60,10 +61,19 @@ class E4Connect:
         :param session_id: numeric ID that identifies the session.
         :param file_path: path of the resulting output file.
         """
-        resp = self.s.get(E4Connect._URL_DOWNLOAD.format(id=session_id))
+        resp = self.s.get(E4Connect._URL_SESSION_DOWNLOAD.format(id=session_id))
         file_path = os.path.join(file_path, '%s.zip' % session_id) if os.path.isdir(file_path) else file_path
         with open('%s' % file_path, 'wb') as f:
             f.write(resp.content)
+
+    def remove_session(self, session_id: str):
+        """
+        Removes a session.
+
+        :param session_id: numeric ID that identifies the session.
+        """
+        resp = self.s.delete(E4Connect._URL_SESSION_DELETE.format(id=session_id))
+        resp.raise_for_status()
 
     def purchased_devices(self) -> list:
         """

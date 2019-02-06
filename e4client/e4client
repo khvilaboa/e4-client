@@ -19,6 +19,7 @@ if __name__ == "__main__":
     parser.add_argument('-a', '--all_sessions', action='store_true', help='Downloads all sessions of a user.')
     parser.add_argument('-f', '--users_file', action='store', help='Read users from file')
     parser.add_argument('-i', '--session_id', action='store', help='Downloads a specific session.')
+    parser.add_argument('-r', '--remove', action='store', help='Removes a specific session.')
     parser.add_argument('-l', '--sessions_list', action='store_true',
                         help='Downloads the list of sessions in CSV format.')
     parser.add_argument('-d', '--purchased_devs', action='store_true',
@@ -109,7 +110,8 @@ if __name__ == "__main__":
                     f.write(DELIM.join(purchases_list[0].keys()))
                     for p in purchases_list:
                         f.write('\n' + DELIM.join(p.values()))
-
+        elif args.remove:
+            e4c.remove_session(args.remove)
 
 
 
